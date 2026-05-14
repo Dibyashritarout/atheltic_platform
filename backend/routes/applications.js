@@ -35,15 +35,24 @@ const upload = multer({
 // POST /api/applications — submit an application (athlete)
 router.post('/', auth, async (req, res) => {
   try {
-    const { athleteId, opportunityId, message } = req.body;
-
-    if (!athleteId || !opportunityId) {
-      return res.status(400).json({ error: 'Athlete ID and Opportunity ID are required.' });
+    const { opportunityId, message } = req.body;
+    
+    let athlete = await Athlete.findOne({ user: req.user._id });
+    
+    // Auto-create basic profile if missing
+    if (!athlete) {
+      athlete = await Athlete.create({
+        user: req.user._id,
+        name: req.user.name || 'New Athlete',
+        sports: ['Other'],
+        status: 'active',
+        verification: { status: 'unverified' }
+      });
     }
 
-    // Verify athlete exists
-    const athlete = await Athlete.findById(athleteId);
-    if (!athlete) return res.status(404).json({ error: 'Athlete not found.' });
+    if (!opportunityId) {
+      return res.status(400).json({ error: 'Opportunity ID is required.' });
+    }
 
     // Verify opportunity exists and is active
     const opportunity = await Opportunity.findById(opportunityId);
@@ -51,7 +60,7 @@ router.post('/', auth, async (req, res) => {
     if (!opportunity.isActive) return res.status(400).json({ error: 'This opportunity is no longer active.' });
 
     // Check for duplicate
-    const existing = await Application.findOne({ athlete: athleteId, opportunity: opportunityId });
+    const existing = await Application.findOne({ athlete: athlete._id, opportunity: opportunityId });
     if (existing) return res.status(400).json({ error: 'You have already applied to this opportunity.' });
 
     // Default verification steps for Blue Tick verification
@@ -64,7 +73,7 @@ router.post('/', auth, async (req, res) => {
     ];
 
     const application = await Application.create({
-      athlete: athleteId,
+      athlete: athlete._id,
       opportunity: opportunityId,
       applicant: req.user._id,
       message,
