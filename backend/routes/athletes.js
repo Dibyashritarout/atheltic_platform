@@ -282,10 +282,7 @@ router.put('/:id/admin-verify-step', auth, async (req, res) => {
 // GET /api/athletes/admin/pending-verifications — Admin lists athletes with pending steps
 router.get('/admin/pending-verifications', auth, async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Only admins can access this.' });
-    }
-
+    if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin only.' });
     const pendingAthletes = await Athlete.find({
       $or: [
         { 'verification.aadhaar.status': 'pending' },
@@ -295,8 +292,28 @@ router.get('/admin/pending-verifications', auth, async (req, res) => {
         { 'verification.coachEndorsement.status': 'pending' }
       ]
     });
-
     res.json(pendingAthletes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/athletes/admin/verification-stats — Admin gets counts of verified, pending, rejected
+router.get('/admin/verification-stats', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin only.' });
+    const [verified, pending, rejected] = await Promise.all([
+      Athlete.countDocuments({ 'verification.status': 'verified' }),
+      Athlete.countDocuments({ 'verification.status': 'pending' }),
+      Athlete.countDocuments({ $or: [
+        { 'verification.aadhaar.status': 'rejected' },
+        { 'verification.ruralAddress.status': 'rejected' },
+        { 'verification.sportsCert.status': 'rejected' },
+        { 'verification.videoReview.status': 'rejected' },
+        { 'verification.coachEndorsement.status': 'rejected' }
+      ]})
+    ]);
+    res.json({ verified, pending, rejected });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

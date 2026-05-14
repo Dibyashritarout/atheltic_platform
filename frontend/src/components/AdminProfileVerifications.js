@@ -11,7 +11,7 @@ const VERIFICATION_STEPS = [
   { key: 'coachEndorsement', label: 'Coach Endorsement' },
 ];
 
-export default function AdminProfileVerifications() {
+export default function AdminProfileVerifications({ onAction }) {
   const [athletes, setAthletes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +35,7 @@ export default function AdminProfileVerifications() {
     try {
       await axios.put(`/api/athletes/${athleteId}/admin-verify-step`, { step, status });
       fetchPending();
+      if (onAction) onAction();
     } catch (err) {
       alert(err.response?.data?.error || 'Action failed');
     }
