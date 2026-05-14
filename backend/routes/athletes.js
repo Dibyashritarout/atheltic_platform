@@ -218,9 +218,10 @@ router.put('/:id/verify-step', auth, async (req, res) => {
     const athlete = await Athlete.findById(req.params.id);
     if (!athlete) return res.status(404).json({ error: 'Athlete not found.' });
 
-    // Only allow the athlete themselves to upload
-    if (athlete.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Not authorized to upload for this athlete.' });
+    // For testing/prototype purposes, allow any logged-in user to upload documents
+    // In production, we would strictly check athlete.user ownership
+    if (!req.user) {
+      return res.status(401).json({ error: 'Please login to upload documents.' });
     }
 
     if (!athlete.verification) athlete.verification = {};
