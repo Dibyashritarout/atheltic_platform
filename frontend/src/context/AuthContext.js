@@ -26,13 +26,13 @@ export const AuthProvider = ({ children }) => {
     const res = await axios.post('/api/auth/login', { email, password });
     localStorage.setItem('token', res.data.token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-    
+
     // Connect to Socket.io after login
     if (!socket) {
-      socket = io('http://localhost:5001');
+      socket = io('https://athetic-platform.onrender.com');
     }
     socket.emit('join', res.data.user.id);
-    
+
     setUser(res.data.user);
     return res.data;
   };
@@ -41,13 +41,13 @@ export const AuthProvider = ({ children }) => {
     const res = await axios.post('/api/auth/register', { name, email, password, role });
     localStorage.setItem('token', res.data.token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-    
+
     // Connect to Socket.io after registration
     if (!socket) {
       socket = io('http://localhost:5001');
     }
     socket.emit('join', res.data.user.id);
-    
+
     setUser(res.data.user);
     return res.data;
   };
