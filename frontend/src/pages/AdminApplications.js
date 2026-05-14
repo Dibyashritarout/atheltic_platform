@@ -27,7 +27,7 @@ export default function AdminApplications() {
       return;
     }
     fetchData();
-  }, [user, navigate, filter]);
+  }, [user, navigate, filter, activeMainTab]);
 
   const fetchData = async () => {
     setLoading(true);
