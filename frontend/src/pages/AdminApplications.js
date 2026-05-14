@@ -88,6 +88,18 @@ export default function AdminApplications() {
         </button>
       </div>
 
+      {/* NEW: Prominent Pending Profile Alert/Section */}
+      {pendingProfilesCount > 0 && activeMainTab !== 'profiles' && (
+        <div className="pending-profiles-alert stagger-children" onClick={() => setActiveMainTab('profiles')}>
+          <div className="ppa-icon">🔔</div>
+          <div className="ppa-text">
+            <h3>{pendingProfilesCount} Profile Verifications Pending</h3>
+            <p>Click here to review and approve athlete documents (Aadhaar, Certificates, etc.)</p>
+          </div>
+          <button className="btn btn-primary btn-sm">Review Now</button>
+        </div>
+      )}
+
       {activeMainTab === 'apps' ? (
         <>
           {/* Stats Cards */}
