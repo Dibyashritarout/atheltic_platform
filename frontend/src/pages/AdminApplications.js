@@ -121,113 +121,114 @@ export default function AdminApplications() {
             <button className={`admin-filter-btn ${filter === 'approved' ? 'active' : ''}`} onClick={() => setFilter('approved')}>Approved</button>
             <button className={`admin-filter-btn ${filter === 'rejected' ? 'active' : ''}`} onClick={() => setFilter('rejected')}>Rejected</button>
           </div>
+
+          {/* Applications List */}
+          {applications.length === 0 ? (
+            <div className="empty-state">
+              <div className="icon">📋</div>
+              <p>No applications {filter ? `with status "${filter}"` : 'yet'}.</p>
+            </div>
+          ) : (
+            <div className="admin-apps-list stagger-children">
+              {applications.map(app => {
+                const statusStyle = getStatusStyles(app.status);
+                return (
+                  <div key={app._id} className="admin-app-card">
+                    <div className="aac-header">
+                      <div className="aac-athlete-info">
+                        <div className="aac-avatar">{app.athlete?.name?.charAt(0) || '?'}</div>
+                        <div>
+                          <h3>{app.athlete?.name || 'Unknown Athlete'}</h3>
+                          <p>{app.athlete?.sports?.join(', ')} {app.athlete?.isRural && <span className="badge badge-green" style={{ marginLeft: '6px' }}>Rural</span>}</p>
+                          <p className="aac-location">{[app.athlete?.city, app.athlete?.state].filter(Boolean).join(', ')}</p>
+                        </div>
+                      </div>
+                      <span className={`badge ${statusStyle.class}`}>{statusStyle.icon} {app.status}</span>
+                    </div>
+
+                    <div className="aac-opportunity">
+                      <span className="aac-opp-label">Applied for:</span>
+                      <Link to={`/opportunities/${app.opportunity?._id}`} className="aac-opp-title">
+                        {app.opportunity?.title || 'Unknown Opportunity'}
+                      </Link>
+                      <span className="aac-opp-org">by {app.opportunity?.organization}</span>
+                    </div>
+
+                    {app.message && (
+                      <div className="aac-message">
+                        <span className="aac-msg-label">Message:</span>
+                        <p>{app.message}</p>
+                      </div>
+                    )}
+
+                    <div className="aac-meta">
+                      <span>Applied: {new Date(app.createdAt).toLocaleDateString()}</span>
+                      {app.reviewedBy && (
+                        <span>Reviewed by {app.reviewedBy.name} on {new Date(app.reviewedAt).toLocaleDateString()}</span>
+                      )}
+                    </div>
+
+                    {app.adminNotes && (
+                      <div className="aac-admin-notes">
+                        <strong>Admin Notes:</strong> {app.adminNotes}
+                      </div>
+                    )}
+
+                    <div className="aac-verification-section">
+                      <button 
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => setExpandedVerification(expandedVerification === app._id ? null : app._id)}
+                      >
+                        {expandedVerification === app._id ? '▼' : '▶'} Blue Tick Verification
+                      </button>
+                      {expandedVerification === app._id && (
+                        <div className="aac-verification-content">
+                          <BlueTickVerification applicationId={app._id} isAdmin={true} />
+                        </div>
+                      )}
+                    </div>
+
+                    {app.status === 'pending' && (
+                      <div className="aac-actions">
+                        {reviewingId === app._id ? (
+                          <div className="aac-review-form">
+                            <textarea
+                              placeholder="Add notes (optional)..."
+                              value={adminNotes}
+                              onChange={e => setAdminNotes(e.target.value)}
+                              rows={2}
+                            />
+                            <div className="aac-review-btns">
+                              <button className="btn btn-primary btn-sm" onClick={() => handleReview(app._id, 'approved')}>
+                                ✅ Approve
+                              </button>
+                              <button className="btn btn-danger btn-sm" onClick={() => handleReview(app._id, 'rejected')}>
+                                ❌ Reject
+                              </button>
+                              <button className="btn btn-secondary btn-sm" onClick={() => { setReviewingId(null); setAdminNotes(''); }}>
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button className="btn btn-primary btn-sm" onClick={() => setReviewingId(app._id)}>
+                            Review Application
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </>
       ) : (
         <div className="profile-verifications-section">
            <AdminProfileVerifications />
         </div>
       )}
-
-      {/* Applications List */}
-      {applications.length === 0 ? (
-        <div className="empty-state">
-          <div className="icon">📋</div>
-          <p>No applications {filter ? `with status "${filter}"` : 'yet'}.</p>
-        </div>
-      ) : (
-        <div className="admin-apps-list stagger-children">
-          {activeMainTab === 'apps' && applications.map(app => {
-            const statusStyle = getStatusStyles(app.status);
-            return (
-              <div key={app._id} className="admin-app-card">
-                <div className="aac-header">
-                  <div className="aac-athlete-info">
-                    <div className="aac-avatar">{app.athlete?.name?.charAt(0) || '?'}</div>
-                    <div>
-                      <h3>{app.athlete?.name || 'Unknown Athlete'}</h3>
-                      <p>{app.athlete?.sports?.join(', ')} {app.athlete?.isRural && <span className="badge badge-green" style={{ marginLeft: '6px' }}>Rural</span>}</p>
-                      <p className="aac-location">{[app.athlete?.city, app.athlete?.state].filter(Boolean).join(', ')}</p>
-                    </div>
-                  </div>
-                  <span className={`badge ${statusStyle.class}`}>{statusStyle.icon} {app.status}</span>
-                </div>
-
-                <div className="aac-opportunity">
-                  <span className="aac-opp-label">Applied for:</span>
-                  <Link to={`/opportunities/${app.opportunity?._id}`} className="aac-opp-title">
-                    {app.opportunity?.title || 'Unknown Opportunity'}
-                  </Link>
-                  <span className="aac-opp-org">by {app.opportunity?.organization}</span>
-                </div>
-
-                {app.message && (
-                  <div className="aac-message">
-                    <span className="aac-msg-label">Message:</span>
-                    <p>{app.message}</p>
-                  </div>
-                )}
-
-                <div className="aac-meta">
-                  <span>Applied: {new Date(app.createdAt).toLocaleDateString()}</span>
-                  {app.reviewedBy && (
-                    <span>Reviewed by {app.reviewedBy.name} on {new Date(app.reviewedAt).toLocaleDateString()}</span>
-                  )}
-                </div>
-
-                {app.adminNotes && (
-                  <div className="aac-admin-notes">
-                    <strong>Admin Notes:</strong> {app.adminNotes}
-                  </div>
-                )}
-
-                <div className="aac-verification-section">
-                  <button 
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => setExpandedVerification(expandedVerification === app._id ? null : app._id)}
-                  >
-                    {expandedVerification === app._id ? '▼' : '▶'} Blue Tick Verification
-                  </button>
-                  {expandedVerification === app._id && (
-                    <div className="aac-verification-content">
-                      <BlueTickVerification applicationId={app._id} isAdmin={true} />
-                    </div>
-                  )}
-                </div>
-
-                {app.status === 'pending' && (
-                  <div className="aac-actions">
-                    {reviewingId === app._id ? (
-                      <div className="aac-review-form">
-                        <textarea
-                          placeholder="Add notes (optional)..."
-                          value={adminNotes}
-                          onChange={e => setAdminNotes(e.target.value)}
-                          rows={2}
-                        />
-                        <div className="aac-review-btns">
-                          <button className="btn btn-primary btn-sm" onClick={() => handleReview(app._id, 'approved')}>
-                            ✅ Approve
-                          </button>
-                          <button className="btn btn-danger btn-sm" onClick={() => handleReview(app._id, 'rejected')}>
-                            ❌ Reject
-                          </button>
-                          <button className="btn btn-secondary btn-sm" onClick={() => { setReviewingId(null); setAdminNotes(''); }}>
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <button className="btn btn-primary btn-sm" onClick={() => setReviewingId(app._id)}>
-                        Review Application
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
+    </div>
     </div>
   );
 }
