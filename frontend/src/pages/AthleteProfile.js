@@ -40,30 +40,28 @@ export default function AthleteProfile() {
     fetchAthleteData();
   }, [id]);
 
-  const toggleVerificationStep = async (step, forceValue) => {
-    if (!user) return; // Only authorized users can verify
+  const requestVerificationStep = async (step, fileUrl) => {
+    if (!user) return;
     try {
-      const currentValue = athlete.verification?.[step] || false;
-      const valueToSet = forceValue !== undefined ? forceValue : !currentValue;
-      const res = await axios.put(`/api/athletes/${id}/verify-step`, { step, value: valueToSet });
+      const res = await axios.put(`/api/athletes/${id}/verify-step`, { step, fileUrl });
       setAthlete({ ...athlete, verification: res.data });
     } catch (err) {
       console.error(err);
+      alert(err.response?.data?.error || 'Failed to submit verification request');
     }
   };
 
   const [uploadingStep, setUploadingStep] = useState(null);
 
   const handleVerificationAction = (stepKey) => {
-    const isDone = athlete.verification?.[stepKey];
-    if (isDone) {
-      // Toggle off for testing purposes
-      toggleVerificationStep(stepKey, false);
-    } else {
-      // Trigger file input
-      const fileInput = document.getElementById(`file-upload-${stepKey}`);
-      if (fileInput) fileInput.click();
+    const stepData = athlete.verification?.[stepKey];
+    if (stepData?.status === 'approved') {
+      // Already verified
+      return;
     }
+    // Trigger file input
+    const fileInput = document.getElementById(`file-upload-${stepKey}`);
+    if (fileInput) fileInput.click();
   };
 
   const onFileSelected = async (e, stepKey) => {
@@ -71,13 +69,12 @@ export default function AthleteProfile() {
     if (!file) return;
 
     setUploadingStep(stepKey);
-    // Simulate upload delay
+    // Simulate upload delay (In a real app, you'd upload the file to /api/upload first)
     setTimeout(async () => {
       try {
-        await toggleVerificationStep(stepKey, true);
+        await requestVerificationStep(stepKey, 'https://example.com/uploaded-file.pdf');
       } finally {
         setUploadingStep(null);
-        // Reset the file input so the same file can be uploaded again if needed
         e.target.value = '';
       }
     }, 1500);
@@ -240,10 +237,24 @@ export default function AthleteProfile() {
                 { key: 'videoReview', label: 'Performance Video Review', icon: 'video' },
                 { key: 'coachEndorsement', label: 'Coach / Federation Endorsement', icon: 'user-check' },
               ].map(step => {
-                const isDone = athlete.verification?.[step.key];
+                const stepData = athlete.verification?.[step.key] || { status: 'none' };
+                const isApproved = stepData.status === 'approved';
+                const isPending = stepData.status === 'pending';
+                const isRejected = stepData.status === 'rejected';
                 const isUploading = uploadingStep === step.key;
+
+                let statusMsg = 'Not started.';
+                if (isUploading) statusMsg = 'Uploading document...';
+                else if (isPending) statusMsg = 'Pending admin review...';
+                else if (isApproved) statusMsg = 'Verified and approved.';
+                else if (isRejected) statusMsg = 'Rejected. Please re-upload.';
+
                 return (
-                  <div key={step.key} className={`verify-step-card ${isDone ? 'done' : ''}`} onClick={() => !isUploading && handleVerificationAction(step.key)}>
+                  <div 
+                    key={step.key} 
+                    className={`verify-step-card ${isApproved ? 'done' : ''} ${isPending ? 'pending' : ''} ${isRejected ? 'rejected' : ''}`} 
+                    onClick={() => !isUploading && handleVerificationAction(step.key)}
+                  >
                     <input
                       type="file"
                       id={`file-upload-${step.key}`}
@@ -252,13 +263,13 @@ export default function AthleteProfile() {
                       accept="image/*,.pdf"
                     />
                     <div className="vs-icon">
-                      {isDone ? <CheckCircle2 size={24} color="#1D9E75" /> : <div className="vs-circle"></div>}
+                      {isApproved ? <CheckCircle2 size={24} color="#1D9E75" /> : isPending ? <div className="vs-circle vs-pending">⏳</div> : <div className="vs-circle"></div>}
                     </div>
                     <div className="vs-info">
                       <h4>{step.label}</h4>
-                      <p>{isUploading ? 'Uploading document...' : isDone ? 'Verified and approved.' : 'Pending review.'}</p>
+                      <p>{statusMsg}</p>
                     </div>
-                    {!isDone && (
+                    {!isApproved && !isPending && (
                       <button className="vs-upload-btn" disabled={isUploading}>
                         {isUploading ? 'Uploading...' : <><Upload size={14} /> Upload</>}
                       </button>

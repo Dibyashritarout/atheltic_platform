@@ -211,25 +211,26 @@ router.get('/:id/injury-risk', async (req, res) => {
   }
 });
 
-// PUT /api/athletes/:id/verify-step
+// PUT /api/athletes/:id/verify-step — Athlete uploads a document for verification
 router.put('/:id/verify-step', auth, async (req, res) => {
   try {
-    const { step, value } = req.body;
+    const { step, fileUrl } = req.body;
     const athlete = await Athlete.findById(req.params.id);
     if (!athlete) return res.status(404).json({ error: 'Athlete not found.' });
 
-    if (!athlete.verification) {
-      athlete.verification = {};
-    }
-    
-    if (['aadhaar', 'ruralAddress', 'sportsCert', 'videoReview', 'coachEndorsement'].includes(step)) {
-      athlete.verification[step] = value;
+    // Only allow the athlete themselves to upload
+    if (athlete.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized to upload for this athlete.' });
     }
 
-    const v = athlete.verification;
-    if (v.aadhaar && v.ruralAddress && v.sportsCert && v.videoReview && v.coachEndorsement) {
-      athlete.verification.status = 'verified';
-    } else {
+    if (!athlete.verification) athlete.verification = {};
+    
+    if (['aadhaar', 'ruralAddress', 'sportsCert', 'videoReview', 'coachEndorsement'].includes(step)) {
+      // If user uploads, it goes to pending
+      athlete.verification[step] = {
+        status: 'pending',
+        fileUrl: fileUrl || athlete.verification[step]?.fileUrl
+      };
       athlete.verification.status = 'pending';
     }
 
@@ -237,6 +238,66 @@ router.put('/:id/verify-step', auth, async (req, res) => {
     res.json(athlete.verification);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+// PUT /api/athletes/:id/admin-verify-step — Admin approves or rejects a step
+router.put('/:id/admin-verify-step', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Only admins can approve/reject verification steps.' });
+    }
+
+    const { step, status } = req.body;
+    const athlete = await Athlete.findById(req.params.id);
+    if (!athlete) return res.status(404).json({ error: 'Athlete not found.' });
+
+    if (['aadhaar', 'ruralAddress', 'sportsCert', 'videoReview', 'coachEndorsement'].includes(step)) {
+      if (!athlete.verification[step]) athlete.verification[step] = { status: 'none' };
+      athlete.verification[step].status = status; // 'approved' or 'rejected'
+    }
+
+    // Update overall status
+    const v = athlete.verification;
+    const steps = ['aadhaar', 'ruralAddress', 'sportsCert', 'videoReview', 'coachEndorsement'];
+    const allApproved = steps.every(s => v[s]?.status === 'approved');
+    const anyPending = steps.some(s => v[s]?.status === 'pending');
+
+    if (allApproved) {
+      athlete.verification.status = 'verified';
+    } else if (anyPending) {
+      athlete.verification.status = 'pending';
+    } else {
+      athlete.verification.status = 'unverified';
+    }
+
+    await athlete.save();
+    res.json(athlete.verification);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// GET /api/athletes/admin/pending-verifications — Admin lists athletes with pending steps
+router.get('/admin/pending-verifications', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Only admins can access this.' });
+    }
+
+    const pendingAthletes = await Athlete.find({
+      $or: [
+        { 'verification.aadhaar.status': 'pending' },
+        { 'verification.ruralAddress.status': 'pending' },
+        { 'verification.sportsCert.status': 'pending' },
+        { 'verification.videoReview.status': 'pending' },
+        { 'verification.coachEndorsement.status': 'pending' }
+      ]
+    });
+
+    res.json(pendingAthletes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

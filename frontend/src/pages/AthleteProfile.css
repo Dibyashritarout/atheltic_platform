@@ -257,6 +257,32 @@
   height: 24px;
   border-radius: 50%;
   border: 2px solid var(--border, #444);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+.vs-circle.vs-pending {
+  border-color: #f59e0b;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.verify-step-card.pending {
+  background: rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.2);
+  cursor: default;
+}
+
+.verify-step-card.rejected {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.verify-step-card.rejected .vs-circle {
+  border-color: #ef4444;
+  color: #ef4444;
 }
 
 .vs-info {

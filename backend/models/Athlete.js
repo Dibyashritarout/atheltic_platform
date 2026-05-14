@@ -18,11 +18,26 @@ const athleteSchema = new mongoose.Schema({
     dateEarned: { type: Date, default: Date.now }
   }],
   verification: {
-    aadhaar: { type: Boolean, default: false },
-    ruralAddress: { type: Boolean, default: false },
-    sportsCert: { type: Boolean, default: false },
-    videoReview: { type: Boolean, default: false },
-    coachEndorsement: { type: Boolean, default: false },
+    aadhaar: { 
+      status: { type: String, enum: ['approved', 'rejected', 'pending', 'none'], default: 'none' },
+      fileUrl: { type: String }
+    },
+    ruralAddress: { 
+      status: { type: String, enum: ['approved', 'rejected', 'pending', 'none'], default: 'none' },
+      fileUrl: { type: String }
+    },
+    sportsCert: { 
+      status: { type: String, enum: ['approved', 'rejected', 'pending', 'none'], default: 'none' },
+      fileUrl: { type: String }
+    },
+    videoReview: { 
+      status: { type: String, enum: ['approved', 'rejected', 'pending', 'none'], default: 'none' },
+      fileUrl: { type: String }
+    },
+    coachEndorsement: { 
+      status: { type: String, enum: ['approved', 'rejected', 'pending', 'none'], default: 'none' },
+      fileUrl: { type: String }
+    },
     status: { type: String, enum: ['unverified', 'pending', 'verified'], default: 'unverified' }
   },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
