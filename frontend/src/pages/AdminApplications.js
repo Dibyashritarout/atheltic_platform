@@ -11,6 +11,7 @@ export default function AdminApplications() {
   const navigate = useNavigate();
   const [applications, setApplications] = useState([]);
   const [stats, setStats] = useState({ total: 0, pending: 0, approved: 0, rejected: 0 });
+  const [profileStats, setProfileStats] = useState({ verified: 0, pending: 0, rejected: 0 });
   const [filter, setFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [reviewingId, setReviewingId] = useState(null);
@@ -18,7 +19,6 @@ export default function AdminApplications() {
   const [expandedVerification, setExpandedVerification] = useState(null);
   const [activeMainTab, setActiveMainTab] = useState('apps'); // 'apps' or 'profiles'
   const [pendingProfilesCount, setPendingProfilesCount] = useState(0);
-  const [profileStats, setProfileStats] = useState({ verified: 0, pending: 0, rejected: 0 });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -33,18 +33,21 @@ export default function AdminApplications() {
     setLoading(true);
     try {
       const params = filter ? { status: filter } : {};
+      
+      // Fetch all stats in parallel
       const [appsRes, statsRes, pendingProfilesRes, profileStatsRes] = await Promise.all([
-        axios.get('/api/applications', { params }),
-        axios.get('/api/applications/stats'),
-        axios.get('/api/athletes/admin/pending-verifications'),
-        axios.get('/api/athletes/admin/verification-stats'),
+        axios.get('/api/applications', { params }).catch(e => ({ data: [] })),
+        axios.get('/api/applications/stats').catch(e => ({ data: { total: 0, pending: 0, approved: 0, rejected: 0 } })),
+        axios.get('/api/athletes/admin/pending-verifications').catch(e => ({ data: [] })),
+        axios.get('/api/athletes/admin/verification-stats').catch(e => ({ data: { verified: 0, pending: 0, rejected: 0 } })),
       ]);
+
       setApplications(appsRes.data);
       setStats(statsRes.data);
       setPendingProfilesCount(pendingProfilesRes.data.length);
       setProfileStats(profileStatsRes.data);
     } catch (err) {
-      console.error(err);
+      console.error('Error fetching admin data:', err);
     } finally {
       setLoading(false);
     }
@@ -74,24 +77,33 @@ export default function AdminApplications() {
 
   return (
     <div className="page admin-apps-page">
-      <Link to="/dashboard" className="back-link">← Back to Dashboard</Link>
+      <div className="admin-header-nav">
+        <Link to="/dashboard" className="back-link">← Back to Dashboard</Link>
+        <button className="btn btn-secondary btn-sm" onClick={fetchData}>🔄 Refresh Data</button>
+      </div>
       
       <div className="page-header">
         <h1>Application Management</h1>
-        <p>Review and manage athlete applications</p>
+        <p>Review and manage athlete applications and profile verifications</p>
       </div>
 
       {/* Tab Switcher */}
       <div className="admin-main-tabs">
-        <button className={`admin-tab-btn ${activeMainTab === 'apps' ? 'active' : ''}`} onClick={() => setActiveMainTab('apps')}>
+        <button 
+          className={`admin-tab-btn ${activeMainTab === 'apps' ? 'active' : ''}`} 
+          onClick={() => setActiveMainTab('apps')}
+        >
           Opportunity Applications {stats.pending > 0 && <span className="tab-badge">{stats.pending}</span>}
         </button>
-        <button className={`admin-tab-btn ${activeMainTab === 'profiles' ? 'active' : ''}`} onClick={() => setActiveMainTab('profiles')}>
+        <button 
+          className={`admin-tab-btn ${activeMainTab === 'profiles' ? 'active' : ''}`} 
+          onClick={() => setActiveMainTab('profiles')}
+        >
           Profile Verifications {pendingProfilesCount > 0 && <span className="tab-badge badge-amber">{pendingProfilesCount}</span>}
         </button>
       </div>
 
-      {/* NEW: Prominent Pending Profile Alert/Section */}
+      {/* Prominent Pending Profile Alert */}
       {pendingProfilesCount > 0 && activeMainTab !== 'profiles' && (
         <div className="pending-profiles-alert stagger-children" onClick={() => setActiveMainTab('profiles')}>
           <div className="ppa-icon">🔔</div>
@@ -103,40 +115,47 @@ export default function AdminApplications() {
         </div>
       )}
 
+      {/* Stats Cards - Dynamic based on active tab */}
+      <div className="admin-stats-grid stagger-children">
+        <div className="admin-stat-card admin-stat-total">
+          <div className="asc-icon">📋</div>
+          <div className="asc-num">
+            {activeMainTab === 'apps' ? stats.total : (profileStats.verified + profileStats.pending + profileStats.rejected)}
+          </div>
+          <div className="asc-label">{activeMainTab === 'apps' ? 'Total Apps' : 'Total Profiles'}</div>
+        </div>
+        <div className="admin-stat-card admin-stat-pending">
+          <div className="asc-icon">⏳</div>
+          <div className="asc-num">
+            {activeMainTab === 'apps' ? stats.pending : profileStats.pending}
+          </div>
+          <div className="asc-label">Pending</div>
+        </div>
+        <div className="admin-stat-card admin-stat-approved">
+          <div className="asc-icon">✅</div>
+          <div className="asc-num">
+            {activeMainTab === 'apps' ? stats.approved : profileStats.verified}
+          </div>
+          <div className="asc-label">Approved</div>
+        </div>
+        <div className="admin-stat-card admin-stat-rejected">
+          <div className="asc-icon">❌</div>
+          <div className="asc-num">
+            {activeMainTab === 'apps' ? stats.rejected : profileStats.rejected}
+          </div>
+          <div className="asc-label">Rejected</div>
+        </div>
+      </div>
+
       {activeMainTab === 'apps' ? (
         <>
-          {/* Stats Cards */}
-          <div className="admin-stats-grid stagger-children">
-            <div className="admin-stat-card admin-stat-total">
-              <div className="asc-icon">📋</div>
-              <div className="asc-num">{activeMainTab === 'apps' ? stats.total : profileStats.verified + profileStats.pending + profileStats.rejected}</div>
-              <div className="asc-label">{activeMainTab === 'apps' ? 'Total Apps' : 'Total Profiles'}</div>
-            </div>
-            <div className="admin-stat-card admin-stat-pending" onClick={() => setFilter('pending')}>
-              <div className="asc-icon">⏳</div>
-              <div className="asc-num">{activeMainTab === 'apps' ? stats.pending : profileStats.pending}</div>
-              <div className="asc-label">Pending</div>
-            </div>
-            <div className="admin-stat-card admin-stat-approved" onClick={() => setFilter('approved')}>
-              <div className="asc-icon">✅</div>
-              <div className="asc-num">{activeMainTab === 'apps' ? stats.approved : profileStats.verified}</div>
-              <div className="asc-label">Approved</div>
-            </div>
-            <div className="admin-stat-card admin-stat-rejected" onClick={() => setFilter('rejected')}>
-              <div className="asc-icon">❌</div>
-              <div className="asc-num">{activeMainTab === 'apps' ? stats.rejected : profileStats.rejected}</div>
-              <div className="asc-label">Rejected</div>
-            </div>
+          {/* Filter for Apps */}
+          <div className="admin-filter-bar">
+            <button className={`admin-filter-btn ${!filter ? 'active' : ''}`} onClick={() => setFilter('')}>All</button>
+            <button className={`admin-filter-btn ${filter === 'pending' ? 'active' : ''}`} onClick={() => setFilter('pending')}>Pending</button>
+            <button className={`admin-filter-btn ${filter === 'approved' ? 'active' : ''}`} onClick={() => setFilter('approved')}>Approved</button>
+            <button className={`admin-filter-btn ${filter === 'rejected' ? 'active' : ''}`} onClick={() => setFilter('rejected')}>Rejected</button>
           </div>
-
-          {activeMainTab === 'apps' && (
-            <div className="admin-filter-bar">
-              <button className={`admin-filter-btn ${!filter ? 'active' : ''}`} onClick={() => setFilter('')}>All</button>
-              <button className={`admin-filter-btn ${filter === 'pending' ? 'active' : ''}`} onClick={() => setFilter('pending')}>Pending</button>
-              <button className={`admin-filter-btn ${filter === 'approved' ? 'active' : ''}`} onClick={() => setFilter('approved')}>Approved</button>
-              <button className={`admin-filter-btn ${filter === 'rejected' ? 'active' : ''}`} onClick={() => setFilter('rejected')}>Rejected</button>
-            </div>
-          )}
 
           {/* Applications List */}
           {applications.length === 0 ? (
@@ -183,12 +202,6 @@ export default function AdminApplications() {
                         <span>Reviewed by {app.reviewedBy.name} on {new Date(app.reviewedAt).toLocaleDateString()}</span>
                       )}
                     </div>
-
-                    {app.adminNotes && (
-                      <div className="aac-admin-notes">
-                        <strong>Admin Notes:</strong> {app.adminNotes}
-                      </div>
-                    )}
 
                     <div className="aac-verification-section">
                       <button 
@@ -241,10 +254,9 @@ export default function AdminApplications() {
         </>
       ) : (
         <div className="profile-verifications-section">
-           <AdminProfileVerifications onAction={() => fetchData()} />
+           <AdminProfileVerifications onAction={fetchData} />
         </div>
       )}
-    </div>
     </div>
   );
 }
