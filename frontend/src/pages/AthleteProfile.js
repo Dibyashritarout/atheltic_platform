@@ -55,8 +55,8 @@ export default function AthleteProfile() {
 
   const handleVerificationAction = (stepKey) => {
     const stepData = athlete.verification?.[stepKey];
-    if (stepData?.status === 'approved') {
-      // Already verified
+    if (stepData?.status === 'approved' || stepData?.status === 'pending') {
+      // Already verified or waiting for admin
       return;
     }
     // Trigger file input
