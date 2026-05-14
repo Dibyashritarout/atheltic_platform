@@ -94,33 +94,34 @@ export default function AdminApplications() {
           <div className="admin-stats-grid stagger-children">
             <div className="admin-stat-card admin-stat-total">
               <div className="asc-icon">📋</div>
-              <div className="asc-num">{stats.total}</div>
-              <div className="asc-label">Total</div>
+              <div className="asc-num">{activeMainTab === 'apps' ? stats.total : pendingProfilesCount}</div>
+              <div className="asc-label">{activeMainTab === 'apps' ? 'Total Apps' : 'Pending Profiles'}</div>
             </div>
             <div className="admin-stat-card admin-stat-pending" onClick={() => setFilter('pending')}>
               <div className="asc-icon">⏳</div>
-              <div className="asc-num">{stats.pending}</div>
+              <div className="asc-num">{activeMainTab === 'apps' ? stats.pending : pendingProfilesCount}</div>
               <div className="asc-label">Pending</div>
             </div>
             <div className="admin-stat-card admin-stat-approved" onClick={() => setFilter('approved')}>
               <div className="asc-icon">✅</div>
-              <div className="asc-num">{stats.approved}</div>
+              <div className="asc-num">{activeMainTab === 'apps' ? stats.approved : '-'}</div>
               <div className="asc-label">Approved</div>
             </div>
             <div className="admin-stat-card admin-stat-rejected" onClick={() => setFilter('rejected')}>
               <div className="asc-icon">❌</div>
-              <div className="asc-num">{stats.rejected}</div>
+              <div className="asc-num">{activeMainTab === 'apps' ? stats.rejected : '-'}</div>
               <div className="asc-label">Rejected</div>
             </div>
           </div>
 
-          {/* Filter */}
-          <div className="admin-filter-bar">
-            <button className={`admin-filter-btn ${!filter ? 'active' : ''}`} onClick={() => setFilter('')}>All</button>
-            <button className={`admin-filter-btn ${filter === 'pending' ? 'active' : ''}`} onClick={() => setFilter('pending')}>Pending</button>
-            <button className={`admin-filter-btn ${filter === 'approved' ? 'active' : ''}`} onClick={() => setFilter('approved')}>Approved</button>
-            <button className={`admin-filter-btn ${filter === 'rejected' ? 'active' : ''}`} onClick={() => setFilter('rejected')}>Rejected</button>
-          </div>
+          {activeMainTab === 'apps' && (
+            <div className="admin-filter-bar">
+              <button className={`admin-filter-btn ${!filter ? 'active' : ''}`} onClick={() => setFilter('')}>All</button>
+              <button className={`admin-filter-btn ${filter === 'pending' ? 'active' : ''}`} onClick={() => setFilter('pending')}>Pending</button>
+              <button className={`admin-filter-btn ${filter === 'approved' ? 'active' : ''}`} onClick={() => setFilter('approved')}>Approved</button>
+              <button className={`admin-filter-btn ${filter === 'rejected' ? 'active' : ''}`} onClick={() => setFilter('rejected')}>Rejected</button>
+            </div>
+          )}
 
           {/* Applications List */}
           {applications.length === 0 ? (
