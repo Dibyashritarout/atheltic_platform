@@ -11,6 +11,12 @@ export default function Opportunities() {
   const [opps, setOpps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ search: '', sport: '' });
+  
+  // New state for application modal
+  const [selectedOpp, setSelectedOpp] = useState(null);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [applyMessage, setApplyMessage] = useState('');
+  const [applying, setApplying] = useState(false);
 
   useEffect(() => {
     const fetchOpps = async () => {
@@ -29,6 +35,28 @@ export default function Opportunities() {
     };
     fetchOpps();
   }, [filters]);
+
+  const handleApplySubmit = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      alert('Please login to apply');
+      return;
+    }
+    setApplying(true);
+    try {
+      await axios.post('/api/applications', {
+        opportunityId: selectedOpp._id,
+        message: applyMessage
+      });
+      alert('Application submitted successfully!');
+      setShowApplyModal(false);
+      setApplyMessage('');
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to submit application');
+    } finally {
+      setApplying(false);
+    }
+  };
 
   return (
     <div className="page">
@@ -64,7 +92,50 @@ export default function Opportunities() {
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
-          {opps.map(o => <OpportunityCard key={o._id} opp={o} />)}
+          {opps.map(o => (
+            <OpportunityCard 
+              key={o._id} 
+              opp={o} 
+              onApply={() => { 
+                setSelectedOpp(o); 
+                setShowApplyModal(true); 
+              }} 
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Apply Modal */}
+      {showApplyModal && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '500px' }}>
+            <h2>Apply for Opportunity</h2>
+            <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
+              <h3 style={{ margin: '0 0 0.5rem 0' }}>{selectedOpp?.title}</h3>
+              <p style={{ margin: 0, opacity: 0.8 }}>{selectedOpp?.organization}</p>
+            </div>
+
+            <form onSubmit={handleApplySubmit}>
+              <div className="form-group">
+                <label>Why are you applying for this? (Message to Admin)</label>
+                <textarea
+                  required
+                  placeholder="Share your achievements or why you need this opportunity..."
+                  value={applyMessage}
+                  onChange={e => setApplyMessage(e.target.value)}
+                  rows={5}
+                />
+              </div>
+              <div className="modal-actions" style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                <button type="submit" className="btn btn-primary" style={{ flex: 1 }} disabled={applying}>
+                  {applying ? 'Submitting...' : 'Submit Application'}
+                </button>
+                <button type="button" className="btn btn-secondary" onClick={() => setShowApplyModal(false)} disabled={applying}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

@@ -23,13 +23,18 @@ export default function OpportunityCard({ opp, onApply }) {
         {deadline && <span className={isExpired ? 'expired' : ''}>🗓 {isExpired ? 'Expired: ' : 'Deadline: '}{deadline}</span>}
       </div>
 
-      <div className="opp-footer">
-        {opp.applicationLink && !isExpired && (
-          <a href={opp.applicationLink} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm">
+      <div className="opp-footer" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        {!isExpired && (
+          <button onClick={onApply} className="btn btn-primary btn-block">
             Apply Now →
+          </button>
+        )}
+        {opp.applicationLink && (
+          <a href={opp.applicationLink} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm" style={{ textAlign: 'center' }}>
+            View Official Details
           </a>
         )}
-        {isExpired && <span className="badge badge-muted">Closed</span>}
+        {isExpired && <span className="badge badge-muted" style={{ width: 'fit-content' }}>Closed</span>}
       </div>
     </div>
   );
