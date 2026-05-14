@@ -1,0 +1,280 @@
+.blue-tick-verification {
+  padding: 20px;
+  background: #1a1a1a;
+  border-radius: 12px;
+}
+
+.verification-title {
+  color: #aaa;
+  font-size: 14px;
+  margin: 0 0 30px 0;
+  font-weight: 400;
+  text-align: center;
+}
+
+.verification-steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.verification-step {
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.verification-step.verification-pending {
+  border-color: #444;
+  background: #1f1f1f;
+}
+
+.verification-step.verification-approved {
+  border-color: #00d084;
+  background: rgba(0, 208, 132, 0.05);
+}
+
+.verification-step.verification-rejected {
+  border-color: #ff4444;
+  background: rgba(255, 68, 68, 0.05);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.step-status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.step-status-icon .checkmark {
+  color: #00d084;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.step-status-icon .cross {
+  color: #ff4444;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.step-status-icon .pending-circle {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #666;
+  border-radius: 50%;
+}
+
+.step-name {
+  margin: 0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.step-content {
+  margin-left: 36px;
+}
+
+.status-text {
+  margin: 0 0 15px 0;
+  font-size: 14px;
+}
+
+.status-text.pending {
+  color: #999;
+}
+
+.status-text.approved {
+  color: #00d084;
+}
+
+.status-text.rejected {
+  color: #ff4444;
+}
+
+.rejection-reason {
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(255, 68, 68, 0.1);
+  border-left: 3px solid #ff4444;
+  color: #ff6666;
+  font-size: 13px;
+}
+
+.resubmit-hint {
+  color: #aaa;
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.upload-section {
+  margin-top: 15px;
+}
+
+.file-upload-label {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.file-upload-label input[type="file"] {
+  display: none;
+}
+
+.upload-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #444;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.upload-button:hover {
+  background: #555;
+}
+
+.file-upload-label input[type="file"]:disabled + .upload-button {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.uploaded-file-info {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(0, 208, 132, 0.1);
+  border-left: 3px solid #00d084;
+  border-radius: 4px;
+}
+
+.file-uploaded {
+  color: #00d084;
+  font-size: 13px;
+  margin: 0;
+}
+
+.admin-approval-section {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+.view-file-link {
+  display: inline-block;
+  color: #00d084;
+  text-decoration: none;
+  margin-bottom: 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.view-file-link:hover {
+  color: #00e694;
+  text-decoration: underline;
+}
+
+.approval-notes {
+  width: 100%;
+  padding: 10px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  resize: vertical;
+  margin: 10px 0;
+  font-family: 'Courier New', monospace;
+}
+
+.approval-notes::placeholder {
+  color: #666;
+}
+
+.approval-notes-display {
+  padding: 10px;
+  background: rgba(0, 208, 132, 0.1);
+  border-left: 3px solid #00d084;
+  color: #aaa;
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.approval-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.approve-btn,
+.reject-btn {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.approve-btn {
+  background: #00d084;
+  color: #000;
+}
+
+.approve-btn:hover:not(:disabled) {
+  background: #00e694;
+}
+
+.reject-btn {
+  background: #ff4444;
+  color: #fff;
+}
+
+.reject-btn:hover:not(:disabled) {
+  background: #ff6666;
+}
+
+.approve-btn:disabled,
+.reject-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.verification-loading {
+  padding: 20px;
+  text-align: center;
+  color: #aaa;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .blue-tick-verification {
+    padding: 15px;
+  }
+
+  .verification-title {
+    font-size: 13px;
+  }
+
+  .step-name {
+    font-size: 15px;
+  }
+
+  .approval-buttons {
+    flex-direction: column;
+  }
+}

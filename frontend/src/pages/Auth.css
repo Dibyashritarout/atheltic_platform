@@ -1,0 +1,18 @@
+.auth-page {
+  min-height: calc(100vh - 64px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(29,158,117,0.08) 0%, transparent 60%);
+}
+.auth-card {
+  width: 100%; max-width: 440px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px; padding: 2.5rem;
+}
+.auth-header { margin-bottom: 2rem; }
+.auth-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 0.03em; color: #F0EDE6; line-height: 1; margin-bottom: 0.35rem; }
+.auth-header p { color: rgba(240,237,230,0.45); font-size: 0.9rem; }
+.auth-switch { margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: rgba(240,237,230,0.4); }
+.auth-switch a { color: #1D9E75; text-decoration: none; font-weight: 500; }
+.auth-switch a:hover { text-decoration: underline; }

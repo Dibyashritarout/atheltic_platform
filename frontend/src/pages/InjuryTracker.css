@@ -1,0 +1,347 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   INJURY TRACKER — Premium Styles
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Risk Dashboard ───────────────────────────────────────────────────────── */
+.injury-risk-section {
+  margin-bottom: 2rem;
+}
+
+.risk-dashboard {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+}
+
+.risk-score-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.risk-gauge-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.risk-gauge {
+  width: 100%;
+  height: 100%;
+}
+
+.risk-gauge circle:last-child {
+  animation: riskGaugeFill 1.5s ease forwards;
+}
+
+@keyframes riskGaugeFill {
+  from { stroke-dasharray: 0 314; }
+}
+
+.risk-gauge-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.risk-gauge-num {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.risk-gauge-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.risk-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.risk-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  max-width: 240px;
+  line-height: 1.5;
+}
+
+/* ── Risk Details ─────────────────────────────────────────────────────────── */
+.risk-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.risk-stats-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.risk-stat {
+  text-align: center;
+}
+
+.rs-num {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-bottom: 0.15rem;
+}
+
+.rs-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Risk Factors ─────────────────────────────────────────────────────────── */
+.risk-factors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.risk-factor-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+}
+
+.risk-factor-item strong {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 0.82rem;
+}
+
+.risk-factor-item p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.rf-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.rf-high {
+  background: rgba(220, 50, 50, 0.06);
+  border-left: 3px solid #EF4444;
+}
+
+.rf-medium {
+  background: rgba(239, 159, 39, 0.06);
+  border-left: 3px solid var(--amber);
+}
+
+.rf-low {
+  background: rgba(29, 158, 117, 0.06);
+  border-left: 3px solid var(--green);
+}
+
+/* ── Sport Injury Info ────────────────────────────────────────────────────── */
+.sport-injury-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.sport-injury-chip {
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ── Injury Timeline ─────────────────────────────────────────────────────── */
+.injury-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.injury-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  transition: border-color var(--transition);
+  position: relative;
+}
+
+.injury-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.injury-active {
+  border-left: 3px solid #EF4444;
+}
+
+.injury-recovering {
+  border-left: 3px solid var(--amber);
+}
+
+.injury-recovered {
+  border-left: 3px solid var(--green);
+}
+
+/* ── Injury Card Innards ──────────────────────────────────────────────────── */
+.inj-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.inj-status-icon {
+  font-size: 1.2rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.inj-title-area {
+  flex: 1;
+}
+
+.inj-title-area h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.inj-date {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  margin: 0;
+}
+
+.inj-badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.inj-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.inj-recovery-bar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.irb-actual {
+  color: var(--green-light);
+}
+
+.inj-treatment {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius);
+}
+
+.inj-tips {
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+}
+
+.inj-tips strong {
+  display: block;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inj-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.inj-tips li {
+  padding: 0.25rem 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.inj-tips li::before {
+  content: '💡';
+  position: absolute;
+  left: 0;
+  font-size: 0.7rem;
+}
+
+.inj-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Badge Red ────────────────────────────────────────────────────────────── */
+.badge-red {
+  background: rgba(220, 50, 50, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(220, 50, 50, 0.2);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .risk-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-score-card {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .inj-header {
+    flex-wrap: wrap;
+  }
+
+  .inj-badges {
+    width: 100%;
+  }
+}

@@ -1,0 +1,379 @@
+/* ── Top Tabs ────────────────────────────────────────────────────────────── */
+.profile-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem; /* scrollbar space */
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border, #333);
+  border-radius: 8px;
+  color: var(--text-muted, #AAA);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text, #FFF);
+}
+
+.tab-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text, #FFF);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tab-divider {
+  height: 4px;
+  background: var(--border, #333);
+  border-radius: 2px;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.tab-indicator {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: var(--text-muted, #AAA);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  width: 20%;
+}
+
+.tab-indicator[data-active="ai-match"] { left: 0%; width: 140px; }
+.tab-indicator[data-active="achievements"] { left: 150px; width: 130px; }
+.tab-indicator[data-active="analytics"] { left: 290px; width: 110px; }
+.tab-indicator[data-active="verification"] { left: 410px; width: 120px; }
+.tab-indicator[data-active="injury"] { left: 540px; width: 150px; }
+
+/* fallback indicator logic */
+
+/* ── Profile Header ──────────────────────────────────────────────────────── */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.ph-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #1D9E75;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.ph-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ph-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ph-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ph-name-row h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text, #FFF);
+}
+
+.badge-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(59, 130, 246, 0.15); /* blue tint */
+  color: #60a5fa; /* light blue */
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.ph-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ph-meta {
+  font-size: 0.9rem;
+  color: var(--text-muted, #AAA);
+}
+
+.badge-rural {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(29, 158, 117, 0.15);
+  color: #34d399; /* light green */
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* ── Content Area ────────────────────────────────────────────────────────── */
+.profile-content {
+  animation: fadeIn 0.4s ease;
+}
+
+.section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted, #888);
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.text-muted {
+  color: var(--text-muted, #AAA);
+}
+
+/* ── Achievements Tab ────────────────────────────────────────────────────── */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.achievement-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border, #333);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s;
+}
+
+.achievement-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+.ach-icon {
+  font-size: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.ach-info h4 {
+  margin: 0 0 0.2rem 0;
+  font-size: 0.95rem;
+  color: #FFF;
+}
+
+.ach-info p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-faint, #888);
+}
+
+/* ── Analytics Tab ───────────────────────────────────────────────────────── */
+.chart-container-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border, #333);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-faint, #888);
+  gap: 1rem;
+}
+
+/* ── Verification Tab ────────────────────────────────────────────────────── */
+.verification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.verify-step-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border, #333);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.verify-step-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.verify-step-card.done {
+  background: rgba(29, 158, 117, 0.05);
+  border-color: rgba(29, 158, 117, 0.2);
+}
+
+.vs-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border, #444);
+}
+
+.vs-info {
+  flex: 1;
+}
+
+.vs-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+  color: #FFF;
+}
+
+.verify-step-card.done .vs-info h4 {
+  color: #34d399; /* Green text if verified */
+}
+
+.vs-info p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted, #AAA);
+}
+
+.vs-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #FFF;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.vs-upload-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Injury Prediction Tab ───────────────────────────────────────────────── */
+.injury-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.risk-banner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 6px solid;
+}
+
+.risk-banner[data-level="Low"] {
+  background: rgba(29, 158, 117, 0.1);
+  border-left-color: #1D9E75;
+}
+
+.risk-banner[data-level="Moderate"] {
+  background: rgba(239, 159, 39, 0.1);
+  border-left-color: #EF9F27;
+}
+
+.risk-banner[data-level="High"] {
+  background: rgba(225, 29, 72, 0.1);
+  border-left-color: #e11d48;
+}
+
+.rb-icon {
+  font-size: 2.5rem;
+}
+
+.rb-text h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+  color: #FFF;
+}
+
+.rb-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.risk-warnings {
+  background: rgba(225, 29, 72, 0.05);
+  border: 1px solid rgba(225, 29, 72, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.risk-warnings h4 {
+  margin: 0 0 1rem 0;
+  color: #f43f5e;
+  font-size: 1rem;
+}
+
+.risk-warnings ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.risk-warnings li {
+  margin-bottom: 0.5rem;
+}
+
+.risk-safe {
+  background: rgba(29, 158, 117, 0.05);
+  border: 1px solid rgba(29, 158, 117, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: #a7f3d0;
+  font-size: 0.95rem;
+}

@@ -1,0 +1,208 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   MY APPLICATIONS — Athlete Applications View
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.my-applications-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.my-apps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.my-app-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  transition: all var(--transition);
+}
+
+.my-app-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Card Header ──────────────────────────────────────────────────────────── */
+.mac-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.mac-opportunity h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.mac-org {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.mac-header .badge {
+  white-space: nowrap;
+}
+
+/* ── Details Grid ─────────────────────────────────────────────────────────── */
+.mac-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mac-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mac-detail-item .label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.mac-detail-item .value {
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ── Message Box ──────────────────────────────────────────────────────────── */
+.mac-message {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--green-light);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.mac-message strong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.mac-message p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ── Verification Section ─────────────────────────────────────────────────── */
+.mac-verification-section {
+  margin-bottom: 1rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 0;
+}
+
+.mac-verification-section .btn {
+  width: 100%;
+  text-align: left;
+}
+
+.mac-verification-content {
+  margin-top: 1rem;
+  padding: 1rem 0;
+}
+
+/* ── Admin Notes ──────────────────────────────────────────────────────────── */
+.mac-admin-notes {
+  font-size: 0.85rem;
+  background: rgba(29, 158, 117, 0.08);
+  border: 1px solid rgba(29, 158, 117, 0.2);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.mac-admin-notes strong {
+  color: var(--green-light);
+}
+
+/* ── Actions ──────────────────────────────────────────────────────────────── */
+.mac-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+.mac-actions .btn {
+  flex: 1;
+}
+
+/* ── Status Badges ────────────────────────────────────────────────────────── */
+.badge-amber {
+  background: rgba(217, 119, 6, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.badge-green {
+  background: rgba(29, 158, 117, 0.15);
+  color: var(--green-light);
+  border: 1px solid rgba(29, 158, 117, 0.3);
+}
+
+.badge-danger {
+  background: rgba(220, 50, 50, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(220, 50, 50, 0.3);
+}
+
+.badge-muted {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* ── Empty State ──────────────────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.empty-state .icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .my-app-card {
+    padding: 1rem;
+  }
+
+  .mac-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mac-details {
+    grid-template-columns: 1fr;
+  }
+
+  .mac-actions {
+    flex-direction: column;
+  }
+}
