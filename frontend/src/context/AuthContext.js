@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 
 const AuthContext = createContext(null);
 let socket = null;
+const SOCKET_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
     // Connect to Socket.io after login
     if (!socket) {
-      socket = io('https://athetic-platform.onrender.com');
+      socket = io(SOCKET_URL);
     }
     socket.emit('join', res.data.user.id);
 
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }) => {
 
     // Connect to Socket.io after registration
     if (!socket) {
-      socket = io('http://localhost:5001');
+      socket = io(SOCKET_URL);
     }
     socket.emit('join', res.data.user.id);
 
