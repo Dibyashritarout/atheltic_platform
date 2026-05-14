@@ -10,7 +10,7 @@ import './AthleteProfile.css';
 export default function AthleteProfile() {
   const { id } = useParams();
   const { user } = useAuth();
-  const navigate = useNavigate();
+
   const [athlete, setAthlete] = useState(null);
   const [performances, setPerformances] = useState([]);
   const [injuryRisk, setInjuryRisk] = useState(null);
@@ -37,7 +37,7 @@ export default function AthleteProfile() {
 
   useEffect(() => {
     fetchAthleteData();
-  }, [id]);
+  }, [fetchAthleteData]);
 
   const toggleVerificationStep = async (step, forceValue) => {
     if (!user) return; // Only authorized users can verify
@@ -68,7 +68,7 @@ export default function AthleteProfile() {
   const onFileSelected = async (e, stepKey) => {
     const file = e.target.files[0];
     if (!file) return;
-    
+
     setUploadingStep(stepKey);
     // Simulate upload delay
     setTimeout(async () => {
@@ -95,7 +95,7 @@ export default function AthleteProfile() {
 
   return (
     <div className="page" style={{ maxWidth: '900px', margin: '0 auto', animation: 'fadeIn 0.5s ease' }}>
-      
+
       {/* Top Tab Navigation */}
       <div className="profile-tabs">
         <button className={`tab-btn ${activeTab === 'ai-match' ? 'active' : ''}`} onClick={() => setActiveTab('ai-match')}>
@@ -155,10 +155,10 @@ export default function AthleteProfile() {
 
       {/* Tab Content */}
       <div className="profile-content">
-        
+
         {/* TAB: AI Match Score */}
         {activeTab === 'ai-match' && <AIMatchTab athleteId={id} />}
-        
+
         {/* TAB: Achievements */}
         {activeTab === 'achievements' && (
           <div className="tab-panel">
@@ -180,7 +180,7 @@ export default function AthleteProfile() {
             )}
           </div>
         )}
-        
+
         {/* TAB: Analytics */}
         {activeTab === 'analytics' && (
           <div className="tab-panel">
@@ -198,7 +198,7 @@ export default function AthleteProfile() {
                 ))}
               </div>
             </div>
-            
+
             <div className="chart-container-card">
               {performances.length >= 2 ? (
                 chartMetrics.map(m => (
@@ -230,7 +230,7 @@ export default function AthleteProfile() {
             <p className="text-muted" style={{ marginBottom: '1.5rem' }}>
               Complete all 5 steps to earn the verified Blue Tick. This builds trust with organizations.
             </p>
-            
+
             <div className="verification-list">
               {[
                 { key: 'aadhaar', label: 'Aadhaar Identity Verification', icon: 'id-card' },
@@ -243,10 +243,10 @@ export default function AthleteProfile() {
                 const isUploading = uploadingStep === step.key;
                 return (
                   <div key={step.key} className={`verify-step-card ${isDone ? 'done' : ''}`} onClick={() => !isUploading && handleVerificationAction(step.key)}>
-                    <input 
-                      type="file" 
-                      id={`file-upload-${step.key}`} 
-                      style={{ display: 'none' }} 
+                    <input
+                      type="file"
+                      id={`file-upload-${step.key}`}
+                      style={{ display: 'none' }}
                       onChange={(e) => onFileSelected(e, step.key)}
                       accept="image/*,.pdf"
                     />
@@ -273,7 +273,7 @@ export default function AthleteProfile() {
         {activeTab === 'injury' && (
           <div className="tab-panel">
             <div className="section-title">AI INJURY RISK ANALYSIS</div>
-            
+
             {!injuryRisk || !injuryRisk.riskLevel ? (
               <p className="text-muted">Not enough data to predict injury risk. Log more sessions.</p>
             ) : (
@@ -296,7 +296,7 @@ export default function AthleteProfile() {
                     </ul>
                   </div>
                 )}
-                
+
                 {injuryRisk.warnings.length === 0 && (
                   <div className="risk-safe">
                     <p>Your training patterns look safe. Keep maintaining a good balance of training and recovery!</p>

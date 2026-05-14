@@ -25,7 +25,7 @@ export default function InjuryTracker() {
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [fetchData]);
 
   const fetchData = async () => {
     setLoading(true);

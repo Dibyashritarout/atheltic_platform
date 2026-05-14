@@ -28,7 +28,9 @@ export default function Athletes() {
     }
   };
 
-  useEffect(() => { fetchAthletes(); }, [filters]);
+  useEffect(() => {
+    fetchAthletes();
+  }, [fetchAthletes]);
 
   return (
     <div className="page">
