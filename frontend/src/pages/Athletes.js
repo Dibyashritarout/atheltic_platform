@@ -28,9 +28,10 @@ export default function Athletes() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchAthletes();
-  }, [fetchAthletes]);
+  }, [filters]);
 
   return (
     <div className="page">

@@ -35,9 +35,10 @@ export default function AthleteProfile() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchAthleteData();
-  }, [fetchAthleteData]);
+  }, [id]);
 
   const toggleVerificationStep = async (step, forceValue) => {
     if (!user) return; // Only authorized users can verify

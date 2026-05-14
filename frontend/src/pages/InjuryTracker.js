@@ -23,9 +23,10 @@ export default function InjuryTracker() {
     type: '', bodyPart: '', severity: 'minor', description: '', dateOccurred: new Date().toISOString().split('T')[0], treatmentNotes: '', sport: '',
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [id]);
 
   const fetchData = async () => {
     setLoading(true);

@@ -16,6 +16,7 @@ export default function AdminApplications() {
   const [adminNotes, setAdminNotes] = useState('');
   const [expandedVerification, setExpandedVerification] = useState(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!user || user.role !== 'admin') {
       navigate('/dashboard');

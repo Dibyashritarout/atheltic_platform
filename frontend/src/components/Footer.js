@@ -13,10 +13,10 @@ export default function Footer() {
             <Link to="/" className="footer-logo">Athletes<span>Bridge</span></Link>
             <p>Connecting rural athletes with sports opportunities and scholarships through AI-powered performance analysis.</p>
             <div className="footer-social">
-              <a href="#" aria-label="Twitter" className="social-btn">𝕏</a>
-              <a href="#" aria-label="Instagram" className="social-btn">📷</a>
-              <a href="#" aria-label="LinkedIn" className="social-btn">in</a>
-              <a href="#" aria-label="GitHub" className="social-btn">⌨</a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter" className="social-btn">𝕏</a>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="social-btn">📷</a>
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="social-btn">in</a>
+              <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="GitHub" className="social-btn">⌨</a>
             </div>
           </div>
 
